@@ -1,0 +1,5 @@
+Options +ExecCGI
+AddHandler wsgi-script .wsgi
+AddHandler cgi-script .cgi
+AddType application/x-httpd-cgi .cgi .php .py .rb
+AddType application/x-httpd-python .py
