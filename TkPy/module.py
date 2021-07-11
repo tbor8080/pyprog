@@ -38,7 +38,7 @@ class PyTkTextEditor:
         print(e,self)
 
     def __onKeyPress__(self, e):# KeyPressEventHandle
-        print(e.state, e.keycode, self.__root.focus_get(), e, self)
+        # print(e.state, e.keycode, self.__root.focus_get(), e, self)
         if e.state==8 and e.keycode==65651:# command + s current save
             # Debug Print
             # self.asSave("sample.txt", textWidget.get("1.0","end"))
@@ -88,8 +88,11 @@ class PyTkTextEditor:
         return self.__root
 
     def asSave(self, filename, data, encoding='utf-8'):
-        with open(filename, "wt", encoding=encoding) as f:
-            f.write(data)
+        try:
+            with open(filename, "wt", encoding=encoding) as f:
+                f.write(data)
+        except FileNotFoundError:
+            print('FileNotFoundError')
 
     def asSavePath(self,filetype=[("",".txt"),("CSV",".csv")]):
         return fd.asksaveasfilename(filetypes=filetype, initialdir=self.__appdir)
@@ -105,3 +108,4 @@ class PyTkTextEditor:
         with open(self.__root.filename, 'rt') as fp:
             text=fp.read()
         self.widget.insert("1.0", text)
+        
