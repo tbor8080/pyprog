@@ -1,0 +1,216 @@
+
+PPT Plan 
+
+date:2021/07/16
+    
+    0. 自己署名証明書
+        0-1. 自己証明を秘密鍵から作成。
+
+    1. Title: 台帳管理（汎用台帳アプリ）(CMS)>[Simple D:@icho]
+        1-1. 台帳作成(create)
+        1-2. 台帳は既にできている。(テンプレート*ひな形) 
+                サンプルを用意
+                1. 文書管理
+                2. 商品リスト
+                    and more...             
+
+    2. 台帳とは・・・・?
+        [[ スクレイプ ]] => https://kotobank.jp/word/%E5%8F%B0%E5%B8%B3-557799
+                          https://
+
+    3. Seleniumとは・・・?
+       テスト自動化とは?何するの?
+        3-0. インストール → pip, chromedriver(Window, OSX)
+        3-1. ペネトレーションテスト(Penetration Test)
+                3-1-1. DoS ...
+                3-1-2. DDoS ...
+                3-1-3. SQLInjection
+                3-1-4. XSS
+                    Check More ...
+
+                3-1-X. And More ...
+                - http://oss.infoscience.co.jp/seleniumhq/docs/01_introducing_selenium.html
+                - https://www.selenium.dev/documentation/ja/
+
+        3-2. Validation Check
+                3-2-1. 入力項目チェック
+                        and more...
+
+        3-3. DB耐久（100万件)
+        3-4. and more ...
+
+        3-X. Auto Browsing Architech
+        3-X. - ScreenShot (As Save Image)
+
+    4. 全体イメージ:
+        4-1. トップページ- List表示(Login Panelなし)
+            @/
+
+        4-2. (作成- @createDenpyo)
+             (更新- @updateDenpyo)
+             (削除- @deliteDenpyo)
+                   
+        4-3. (出力-@printPdf
+                   @printExcel
+                   @printHTML)
+        4-4. and more...
+
+    5. DB 図: Table: CMS / Daicho ... RDBMS SQLite 
+    6. Install イメージ：
+        - Install.py
+            ##################################
+            # Wait .....
+            ##################################
+        -------------------------------------------------------------------
+        [ Install Successed ]
+
+        +　/　[ Document Root ]:
+            - pypy
+                - __init__.py
+                - module.py
+                    class CompanyLedger:
+                        - def __init__(self):
+                        - def getDate(self):
+                            return datetime.datetime.today().strftime('%Y%m%d')
+                        - def getDateTime(self):
+                            return datetime.datetime.today().strftime('%Y%m%d %H%M%s')
+                        - def saveAsData(self, file, text, mode='wt'):
+                            with open(file, mode) as fp:
+                                fp.write(text)
+                        
+                        # WebApp @Routing
+                            + 
+                        - def create(self):
+                            # Create Table Image...
+                            # CREATE TABLE FROM {tbl} abc_id (INTEGER) NOT NULL AUTO INCLIMENT 
+                        - def insert(self):
+                        - def update(self):
+                        - def delete(self):
+                        - def search(self):
+                    # Selenium Auto Command Class
+
+                    class SleniumCMD:
+                        - def __init__(self):
+                        - def SqlInjection(self):
+                        - def Xss(self):
+                        - def DoS(self):
+                        - def FormValidation(self):
+                        # 負荷系
+                        - def SqlLoad(self):
+                        - def SessionLoad(self):
+
+                - databese.py
+
+                    # new database()
+
+                    class database(sqlite3):
+                        - def __init__(self):
+                            self.__db='*.db'
+                            self.__conn=None
+                        - def connection(self):
+                            if not os.path.exists(self.__db):
+                                self.__conn=sqlite3(self.__db)
+                            return self.__conn
+                        - def cursor(self):
+                            return self.__conn.cursor()
+                        - def sql(self, sql=[]):
+                        - def create_table(self):
+                            # SQL
+                            # CREATE TABLE FROM {tbl}(
+                            #    num INTEGER PRIMARY KEY,
+                            #    reg_name TEXT, #カラム名
+                            #);
+                        - def insert(self, data=[]):
+                            # SQL 
+                            # INSERT INTO {tbl} VALUES [([?,?,?,...]),]
+                            # Last Comma
+                            return SQL_STRING
+                        - def update(self):
+                            # SQL 
+                            # UPDATE {tbl} SET [{_key}={_value}...] 
+                            # WHERE [{where_key}={where_value}, ...]
+                        - def delete(self):
+                            # SQL
+                            # DELETE FROM {tbl} WHERE [id=?.....]
+                            # "WHERE" Syntax is "Repeat Syntax". 
+                            # "[]"(Bracket) is "Repeat Syntax".
+            - database
+                - *.db
+                    - prefix: COMPANY_
+                    - DATABASE TABLE NAME:
+                        # 会社情報
+                        - COMPANY_INFO is 
+                            - comp_id INTEGER NOT NULL AUTO INCLIMENT PRIMARY KEY,
+                            - comp_name_ja TEXT NOT NULL,
+                            - comp_name_en TEXT, NOT NULL,
+                            - comp_description TEXT,
+                            - comp_register_date DATE,
+                            - comp_update DATE
+
+                        # 文書管理台帳
+                        - COMPANY_DOCUMENT_LIST is  
+                            - comp_id INTEGER NOT NULL,
+                            - document_num INTEGER NOT NULL AUTO INCLIMENT PRIMARY KEY,
+                            - category TEXT,# 分類
+                            - document_name TEXT,# 文書名
+                                # 文書番号(文書ID)
+                            - deploy TEXT, #部署
+                            - save_date DATE,# 保存期間
+                            - date_of_renovation01 DATE,#改修年月日
+                            - date_of_renovation02 DATE,#改修年月日
+                            - disposal_date DATE,#廃棄年月日
+                            - reg_update DATE
+
+                        - COMPANY_COMMODITY_LIST is
+                            - comp_id ,
+                            - commodity_num ,
+                            - name ,
+                            - maker ,
+                            - word ,
+                            - invetory ,
+                            - remarks
+
+                        ==================================================================
+                        共通化できるならば、要素名・型などを登録しておいて、
+                        台帳管理CMSが開発できるかも・・・
+                        - COMPANY_SUMMARY is 
+                            - summary_id INTEGER NOT NULL AUTO INCLIMENT PRIMARY KEY,
+                            - summary_text TEXT,
+                            - summary_function,
+                            - summary_register_date DATE
+
+                        - COMPANY_{Ledger} is
+                            - 
+            - static
+                - css
+                    *.css
+                    - style.css
+                - javascript
+                    *.js
+                    - script.js
+            - templates
+                - *.html
+                - FrameWork: BootStrap
+            - main.py
+                - Flask 
+                    @Routing
+                - 
+
+    7. Modeling - UML
+        + Cacoo
+    8. Server Image Deploy 環境など・・・・・
+        + Sakura Internet :VPS
+            - Platform: CentoS, Alma Linux(RHEL Based.....)
+            - IP 
+            - Git Push Enviroment
+            - Python
+            - Apache
+            - mod_python
+    9. 実現したい事: => 未実装 => CMS化（抽象化）, AI
+        + 現場でつかえるマイクロサービス
+        + 台帳 CMS化
+    10. [slideshare] https://www.slideshare.net/ | [speakdeck] https://speakerdeck.com/ | 
+    11. 
+
+- Upload: Github Private Key Authetication: https://
+

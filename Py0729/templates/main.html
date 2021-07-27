@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8">
+        <title>{{page_title}}</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    </head>
+    <body>
+      <!-- Global Header -->
+      <nav class="navbar fixed-top navbar-light" style=''>
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#"><h3><img src="./static/img/bootstrap-logo.svg" alt="" width="30" height="24">&nbsp;[HTML Template] by Bootstrap</h3></a>
+          <!-- Search -->
+          <form method='POST' action='/search' class='d-flex'>
+              <label for="exampleFormControlInput1" class="col-xl-5 col-form-label">文書・分類・部署で検索</label>
+              <input name='search_word' value='開発' class="form-control me-2">
+              <button type="submit" class="btn btn-outline-success" id='document_search'>Search</button>
+          </form>
+          <!-- /Search -->
+        </div>
+      </nav>
+      <!-- /Global Header -->
+      <div class='container'>
+        
+        <br><br><br>
+        <div class='row'>
+          <div class="alert alert-warning" role="alert">
+            <h3 class="alert-heading">こんにちは</h3>
+            <p>本郷アカデミーでSelenium用に開発しました。<br>
+               DBへの[Insert/Delete/Search]機能だけつけました。</p>
+            <hr>
+            <p class="mb-0">楽しんで行ってね。</p>
+          </div>
+        <div class='col-sm' style='width:380px;'>
+        <div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white" style="width: 380px;">
+            <!-- List Title -->
+            <a class="navbar-brand" href="#">
+              <h3><img src="./static/img/bootstrap-logo.svg" alt="" width="30" height="24">
+                &nbsp;Navigation by Bootstrap</h3></a>
+            
+            
+            <!-- /List Title -->
+            <div class="list-group list-group-flush border-bottom scrollarea">
+            <!-- Scroll Area -->
+              
+              <!-- Repeat List -->
+              <a href="#" class="list-group-item list-group-item-action active py-3 lh-tight" aria-current="true">
+                <div class="d-flex w-100 align-items-center justify-content-between">
+                  <strong class="mb-1">文書管理</strong>
+                  <small>Mon</small>
+                </div>
+                <div class="col-10 mb-1 small">作成日：[〇〇]</div>
+              </a>
+              <form method='POST' action='/delete'>
+              <div class="row">
+                <label for="exampleFormControlInput1" class="col-sm-2 col-form-label"></label>
+                <button type="submit" class="btn btn-danger" id='delete_document'>選択した文書を削除</button>
+              </div>
+              <br>
+              <table class='table table-light table-striped'>
+                <tr class='table-dark'>
+                  <th>分類</th>
+                  <th>文書名</th>
+                  <th>作成部署</th>
+                </tr>
+                {% for row in items %}
+                <tr>
+                  <td><input type='radio' name='document_num' value='{{row[0]}}'>{{row[2]}}</td>
+                  <td><a href='#' class="link-secondary">{{row[3]}}</a></td>
+                  <td>{{row[4]}}</td>
+                </tr>
+                {% endfor %}
+              </table>
+              <div class="row">
+                <label for="exampleFormControlInput1" class="col-sm-2 col-form-label"></label>
+                <button type="submit" class="btn btn-danger" id='delete_document'>選択した文書を削除</button>
+              </div>
+              </form>
+              <!-- /Repeat List -->
+              
+              <!-- Repeat List -->
+              <a href="#" class="list-group-item list-group-item-action py-3 lh-tight" aria-current="true">
+                <div class="d-flex w-100 align-items-center justify-content-between">
+                  <strong class="mb-1">商品リスト</strong>
+                  <small>Tue</small>
+                </div>
+                <div class="col-10 mb-1 small">作成日：[〇〇]</div>
+              </a>
+              <!-- /Repeat List -->
+            
+            <!-- /Scroll Area -->
+            </div>
+
+          </div>
+        </div>
+        <div class='col-xl'>
+          <form action='insert' method='POST'>
+            <h3>新規登録(文書)</h3>
+            <div class="row mb-3">
+              <label for="exampleFormControlInput1" class="col-sm-2 col-form-label">文書名</label>
+              <div class="col-sm-8">
+                <input name='document_name' value='TEST1' class="form-control col-sm-2">
+              </div>
+            </div>
+            <div class="row mb-3">
+              <label for="exampleFormControlInput1" class="col-sm-2 col-form-label">分類</label>
+              <div class="col-sm-8">
+                <input name='category' value='見積もり' class="form-control">
+              </div>
+            </div>
+            <div class="row mb-3">
+              <label for="exampleFormControlInput1" class="col-sm-2 col-form-label">作成部署</label>
+              <div class="col-sm-8">
+                <input name='company_deploy' value='開発' class="form-control">
+              </div>
+            </div>
+            <div class="row mb-3">
+              <label for="exampleFormControlInput1" class="col-sm-2 col-form-label">作成年月日</label>
+              <div class="col-sm-4">
+                <input name='from_save_date' value='2021-07-22' class="form-control">
+              </div>
+            </div>
+            <div class="row mb-3">
+              <label for="exampleFormControlInput1" class="col-sm-2 col-form-label">廃棄年月日</label>
+              <div class="col-sm-4">
+                <input name='disposal_date' value='2022-07-22' class="form-control">
+              </div>
+            </div>
+            <div class="row mb-3">
+              <label for="exampleFormControlInput1" class="col-sm-2 col-form-label">備考</label>
+              <div class="col-sm-8">
+                <textarea name='remark' class="form-control">備考欄・なにかあれば書いてください。</textarea>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <label for="exampleFormControlInput1" class="col-sm-2 col-form-label"></label>
+              <div class="col-sm-4">
+                <button type="submit" class="btn btn-success" id='new_document'>登録</button>
+            </div>
+          </form>
+        </div>
+        </div>
+        </div>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    </body>
+</html>
