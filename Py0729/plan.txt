@@ -29,8 +29,10 @@ date:2021/07/16
                     Check More ...
 
                 3-1-X. And More ...
-                - http://oss.infoscience.co.jp/seleniumhq/docs/01_introducing_selenium.html
-                - https://www.selenium.dev/documentation/ja/
+                    - http://oss.infoscience.co.jp/seleniumhq/docs/01_introducing_selenium.html
+                    - https://www.selenium.dev/documentation/ja/
+                    - https://www.w3.org/TR/webdriver/#design [W3C]
+                    - https://qiita.com/hiroshitoda/items/ed2b0a89ace2db2e1847
 
         3-2. Validation Check
                 3-2-1. 入力項目チェック
