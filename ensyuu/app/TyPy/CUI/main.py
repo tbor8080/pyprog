@@ -123,5 +123,6 @@ def main():
         sleep(0.2)
     
 # main()
+# program->pypy/typy.py
 instanse=typy.TyPy()
 instanse.run()
