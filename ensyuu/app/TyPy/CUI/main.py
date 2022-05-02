@@ -101,7 +101,6 @@ def main():
     sleep(0.1)
     thread01.setDaemon(True)
     thread01.start()
-
     while True:
         counter+=1
         mondai=text_data[random.randint(0,len(text_data)-1)]
@@ -123,5 +122,6 @@ def main():
         print(line,f'/Miss:{mistake}\n\n')
         sleep(0.2)
     
+# main()
 instanse=typy.TyPy()
 instanse.run()

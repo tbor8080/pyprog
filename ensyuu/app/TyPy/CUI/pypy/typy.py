@@ -36,7 +36,7 @@ class TyPy:
             "__Lang__":"ja",
             "__ChrSet__":"utf-8"
         }
-        self.__Data=[]
+        self.__Data=['IITENKIDESUNE','SOUSOU']
         self.__lineData=""
         self.__t=0
         self.__missCount=0
@@ -120,7 +120,7 @@ class TyPy:
     
     def printProgram(self, line):
 
-        (practice_Data, msg)="", ""
+        (practice_Data, msg)=None, ""
         if len(self.__Data)>0:
             practice_Data=self.__Data[random.randint(0,len(self.__Data)-1)]
 
@@ -213,10 +213,11 @@ class TyPy:
 
         # init variable in TyPyMainLoop
         (lineInitMsg,lineMsg)=f"[[[文字練習]]]",f"入力してください>>"
+        # タイマーの設定(default:60 seconds)
         self.setSelfTimerData(60)
         self.printInitMsg(lineInitMsg)
         self.printInitMsg(f'制限時間は{self.getSelfTimerData()}秒です。Enterを押すと自動的にカウントが開始し、練習問題がでます。\n')
-        sleep(0.1)
+        sleep(0.5)
 
         # SelfTimer / Thread
         TyPyThread_SelfTimer=threading.Thread(target=self.selfTimer, args=(self.getSelfTimerData(),))
