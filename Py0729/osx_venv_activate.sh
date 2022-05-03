@@ -1,1 +1,1 @@
-source /Users/ryohei/Desktop/program/Py/PySeisaku/develop/bin/activate
+source ~/Desktop/program/Py/PySeisaku/develop/bin/activate
