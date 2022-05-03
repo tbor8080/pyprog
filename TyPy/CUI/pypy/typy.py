@@ -31,7 +31,7 @@ class TyPy:
     def __init__(self):
         # Initialize TyPy
         self.__TyPy={
-            "__Version__":0.01,
+            "__Version__":"0.5 alpha",
             "__AppName__":"Typy",
             "__ProgLang__":"Python",
             "__Lang__":"ja",
@@ -132,9 +132,9 @@ class TyPy:
         print(msg)
     
     def printProgram(self, line):
-
-        (practice_Data, msg)="", ""
-        if len(self.__Data)>0:
+        
+        (practice_Data, msg) = None, ""
+        if len(self.__getData())>0:
             practice_Data = self.__getData()
         
         if line == "":
@@ -228,19 +228,40 @@ class TyPy:
     def TyPyMainLoop(self):
 
         # init variable in TyPyMainLoop
-        (lineInitMsg,lineMsg) = f"[[[タイピング練習を始めます]]]", f"開始する>>"
+        (lineInitMsg,lineMsg) = f"", f"[ Press Enter !! ] >>"
+        
         self.setSelfTimerData(60)
-        self.printInitMsg(lineInitMsg)
-        self.printInitMsg(f'制限時間は{self.getSelfTimerData()}秒です。Enterを押すと自動的にカウントが開始し、練習問題がでます。\n')
+        # プログラム開始時に表示されるメッセージ
+        lineInitMsg = f"""
+#######################################################################
+        [[[ タイピング練習を開始します ]]]
+            > 制限時間は{self.getSelfTimerData()}秒。
+            
+            > 入力したら、Enter Keyを押すと次の問題に進みます。
+            > ※ 終了する場合は[ q + Enter Key ]で終了するよ
+            > {self.getSelfTimerData()}秒で何文字打てるかな？
+
+            > 準備はいいかな？（Enter Keyを押してね。） 
+#######################################################################
+        """
+
+        self.printInitMsg(lineInitMsg)        
+        
         sleep(0.5)
 
         # SelfTimer / Thread
-        TyPyThread_SelfTimer=threading.Thread(target=self.selfTimer, args=(self.getSelfTimerData(),))
+        TyPyThread_SelfTimer = threading.Thread(target=self.selfTimer, args=(self.getSelfTimerData(),))
         TyPyThread_SelfTimer.setDaemon(True)
         TyPyThread_SelfTimer.start()
+        # loop counter
+        counter = 0
         while True:
-            line=input(lineMsg)                
-            self.printProgram(line)
+            
+            if counter > 0:
+                lineMsg = '[問題]に書かれている文字をタイピングしてください >>'
+
+            line=input(lineMsg)
+            
             if line=="q":
                 self.printFinishProgramMsg(line)
                 break
@@ -251,6 +272,10 @@ class TyPy:
             if len(self.__Data)==0:
                 print(f'データがありません。プログラムを終了します。')
                 break
+            
+            self.printProgram(line)
+            
+            counter += 1
 
     def run(self):
         self.TyPyMainLoop()
