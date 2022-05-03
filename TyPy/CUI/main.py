@@ -1,42 +1,28 @@
+# coding: UTF-8
 from time import sleep
 import tkinter
-#Debug
-#import sys
-"""
-    Validate Module imoprt
-"""
-# Module Loader Error Message
-def ML_errMsg(m, e):
-    errMsg=""
-    if e==ModuleNotFoundError:
-        errMsg=f'{e.args}\nModule:{m}が読み込めませんでした。'
-    elif e==NameError:
-        errMsg=f'Module:{m}が見つかりませんでした。'
-    elif e== ImportError:
-        errMsg=f'{m}の場所がわかりません。'
-    print(errMsg)
-    return errMsg
+import sys
+# This Program is Python3 higher
+if sys.version_info.major > 2 and sys.version_info.minor > 5:
+    pass
+else:
+    print(sys.version)
+    exit()
 
 try:
-    moduleName="tsts"
-    # import tsts
-except ModuleNotFoundError as e:
-    print(ML_errMsg(moduleName, e))
-try:
-    moduleName="random"
     import random
-except ModuleNotFoundError:
-    print(f'Module: ramdomがimportされていません。')
+except ModuleNotFoundError as e:
+    #print('Module: ramdomがimportされていません。')
+    pass
+
 try:
-    moduleName="threading"
     import threading
-except ModuleNotFoundError:
+except ModuleNotFoundError as e:
     print(f'Module: threadingがimportされていません。')
+
 try:
-    moduleName="time"
-    module="sleep"
     from time import sleep
-except ModuleNotFoundError:
+except ModuleNotFoundError as e:
     print(f'Module: {module}がimportされていません。')
     print(f'Typing>> from time import {module}')
 except NameError:
