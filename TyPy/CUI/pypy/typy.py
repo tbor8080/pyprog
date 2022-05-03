@@ -4,6 +4,7 @@ import sys
 from time import sleep
 import random
 import threading
+
 """
     * TyPy Class
 
@@ -36,7 +37,7 @@ class TyPy:
             "__Lang__":"ja",
             "__ChrSet__":"utf-8"
         }
-        self.__Data=[]
+        self.__Data=["sample01","sample02"]
         self.__lineData=""
         self.__t=0
         self.__missCount=0
@@ -54,10 +55,22 @@ class TyPy:
     
     def __getVersion(self):
         return self.__TyPy["__Version__"]
+
     def __getAppName(self):
         return self.__TyPy["__AppName"]
+
     def __getLang(self):
         return self.__TyPy["__Lang__"]
+
+    # Get Data
+    """
+        - csv
+        - json:
+            {"name":"typing for console/program by Python.","type":"json","data":[]}
+        - sql
+    """
+    def __getData(self):
+        return self.__Data[random.randint(0,len(self.__Data)-1)]
 
     def getLineData(self):
         return self.__lineData
@@ -122,7 +135,10 @@ class TyPy:
 
         (practice_Data, msg)="", ""
         if len(self.__Data)>0:
-            practice_Data=self.__Data[random.randint(0,len(self.__Data)-1)]
+            practice_Data = self.__getData()
+        
+        if line == "":
+            print("Enterが押されました。")
 
         # debug print
         # print("Debug>>>",line, practice_Data, len(line), len(practice_Data))
@@ -212,20 +228,18 @@ class TyPy:
     def TyPyMainLoop(self):
 
         # init variable in TyPyMainLoop
-        (lineInitMsg,lineMsg)=f"[[[文字練習]]]",f"入力してください>>"
+        (lineInitMsg,lineMsg) = f"[[[タイピング練習を始めます]]]", f"開始する>>"
         self.setSelfTimerData(60)
         self.printInitMsg(lineInitMsg)
         self.printInitMsg(f'制限時間は{self.getSelfTimerData()}秒です。Enterを押すと自動的にカウントが開始し、練習問題がでます。\n')
-        sleep(0.1)
+        sleep(0.5)
 
         # SelfTimer / Thread
         TyPyThread_SelfTimer=threading.Thread(target=self.selfTimer, args=(self.getSelfTimerData(),))
         TyPyThread_SelfTimer.setDaemon(True)
         TyPyThread_SelfTimer.start()
-
         while True:
-            
-            line=input(lineMsg)
+            line=input(lineMsg)                
             self.printProgram(line)
             if line=="q":
                 self.printFinishProgramMsg(line)
