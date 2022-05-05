@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
-import sys
+import sys,os
 from time import sleep
 import random
 import threading
+import json
 
 """
     * TyPy Class
@@ -37,7 +38,7 @@ class TyPy:
             "__Lang__":"ja",
             "__ChrSet__":"utf-8"
         }
-        self.__Data=["sample01","sample02"]
+        self.__Data=[]
         self.__lineData=""
         self.__t=0
         self.__missCount=0
@@ -224,9 +225,24 @@ class TyPy:
 
     def __debug(self):
         pass
+    
+    def setToJsonData(self,file):
+        # JSONデータを抽出、self.__Dataに格納
+        data={}
+        with open(file,"rt") as fp:
+            data=json.load(fp)
+        words=data["word"]
+        self.__Data = []
+        for w in words:
+            self.__Data.append(w["roma"])
 
     def TyPyMainLoop(self):
-
+        file = "./json/typy.json"
+        # print(os.path.isfile(file))
+        self.setToJsonData(file)
+        # print(self.__getData())
+        # exit()
+        # Jsondataからwordのみを抽出・読み込み
         # init variable in TyPyMainLoop
         (lineInitMsg,lineMsg) = f"", f"[ Press Enter !! ] >>"
         
@@ -240,7 +256,8 @@ class TyPy:
             > 入力したら、Enter Keyを押すと次の問題に進みます。
             > ※ 終了する場合は[ q + Enter Key ]で終了するよ
             > {self.getSelfTimerData()}秒で何文字打てるかな？
-
+            > 問題は半角英数字で出題されます。
+            > （大文字/小文字は区別しません。）
             > 準備はいいかな？（Enter Keyを押してね。） 
 #######################################################################
         """

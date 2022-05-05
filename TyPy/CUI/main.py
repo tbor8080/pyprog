@@ -30,8 +30,6 @@ except NameError:
 except ImportError:
     print(f'Import Error:{module}の場所がわかりません。')
 
-
-
 """
 [[ Typy:Typing Pythonware Prototype(CUI) ]]
     - 
