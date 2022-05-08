@@ -1,0 +1,25 @@
+# /usr/bin/env sh
+
+# データファイルの確認
+# FILE=./json/typy.json
+# if [ -f $FILE ]; then
+#     echo "$FILE は存在しています。"
+# fi
+
+COMMAND=$1
+OP=${@:2}
+
+if [ $COMMAND != "main" ]; then
+    
+    # 実行ファイルの指定
+    PYTY="/usr/bin/env python -m tcli $COMMAND $OP"
+
+else
+    
+    PYTY="/usr/bin/env python -m main"
+
+fi
+
+# 実行
+# コマンドの間にスペースが含まれる場合、eval関数を使用
+eval $PYTY
