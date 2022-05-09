@@ -1,6 +1,5 @@
-from ctypes.wintypes import WORD
 import sys,os,datetime,json
-from tkinter import W
+
 try:
     import pykakasi
 except ModuleNotFoundError:
@@ -306,13 +305,14 @@ class TypyConsole:
 ==================================================================================================
 ###################################################################################################"""
         print(msg)
+        
     def debug(self,txt):
         print("debug>>",txt)
     
     def logging(self):
         logfile = './log/tcli.log'
         txt = f'[{self.getDateNow()}] command:{self.getCommand()}/option:{self.getOption()}'
-        with open(logfile, "wb") as fp:
+        with open(logfile, "wt") as fp:
             fp.write(txt)
 
     def run(self):

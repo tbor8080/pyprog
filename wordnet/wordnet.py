@@ -1,23 +1,38 @@
 # from select import *
-from asyncore import file_dispatcher
+from importlib.resources import path
 import sys,os,sqlite3,json,datetime
 
 class WordNet:
     def __init__(self):
-       self.__file = './wnjpn.db'
-       self.__lang = 'jpn'
-       self.__pos = 'n'
-       self.__word = ''
-       self.__args__=[]
-       self.__command__=""
-       self.__option__=[]
-       self.__json_file__ = './json/data.json'
-       self.__log_file = './log/wn.log'
-       self.__pos = {('n','名詞'),('v','動詞'),('r','副詞'),('a','形容詞')}
+        
+        self.__version = '0.1b'
+        self.__file = './wnjpn.db'
+        self.__lang = 'jpn'
+        self.__pos = 'n'
+        self.__word = ''
+        self.__args__=[]
+        self.__command__=""
+        self.__option__=[]
+        self.__json_file__ = './json/data.json'
+        self.__log_file = './log/wn.log'
+        self.__pos = {('n','名詞'),('v','動詞'),('r','副詞'),('a','形容詞')}
+
+    def getVersion(self):
+        return self.__version
+
+    # ファイルなどの存在確認
+    def isFile(self,path="./"):
+        return os.path.isfile(path)
     
+    def isDir(self,path="./"):
+        return os.path.isdir(path)
+    
+    def exists(self,path="./"):
+        return os.path.exists(path)
+
     def getFilePath(self):
         return self.__file
-    
+
     # Log
     def getLogFile(self):
         return self.__log_file
@@ -59,6 +74,12 @@ class WordNet:
     def __cur(self):
         return self.__c().cursor()
 
+    def _c(self):
+        return sqlite3.connect(self.getFilePath())
+    
+    def _cur(self):
+        return self._c().cursor()
+
     # cli interface 引数の取得
     def getArgv(self):
         for x in sys.argv:
@@ -77,7 +98,6 @@ class WordNet:
     def setOption(self,op):
         self.__option__=op
     
-
     def abort(self):
         print(f'処理を中断しました。')
         exit()
@@ -91,15 +111,16 @@ class WordNet:
     def word_count(self):
         word_count={}
         cur = self.__cur()
-        # select count(lemma) from word where lang='jpn' and pos='a/r/n/v'
+
         select_txt = "select count(lemma) from word"
         cur.execute(select_txt)
+
         result = cur.fetchone()[0]
         word_count["all"] = result
         print(f"総単語数：{result}件")
         
         print('======================================')
-
+        # 単語(Japanese)
         select_txt = "select count(lemma) from word where lang='jpn'"
         cur.execute(select_txt)
         result = cur.fetchone()[0]
@@ -117,6 +138,7 @@ class WordNet:
 
         print('======================================')
 
+        # 単語(English)
         select_txt = "select count(lemma) from word where lang='eng'"
         cur.execute(select_txt)
         result = cur.fetchone()[0]
@@ -138,7 +160,7 @@ class WordNet:
 
         cur.close()
 
-        self.logging(f"[処理]:メソッド:({self.getFunction()}) : [内容]:単語数の一覧表示")
+        self.logging(f"[処理]:メソッド:(l{sys._getframe().f_code.co_name}) : [内容]:単語数の一覧表示")
 
     def word_search(self):
         # inner join :word + sense
@@ -159,7 +181,7 @@ ON  sense.synset=synset_def.synset
 AND synset_def.lang='{self.getLang()}';
 """
             cur.execute(word_synset_join_serect)
-            self.logging(f"[処理]:メソッド:({sys._getframe().f_code.co_name}) / [内容]単語検索({search_word}/{self.getLang()})")
+            self.logging(f"[処理]:メソッド:({sys._getframe().f_code.co_name}) / [内容]単語検索:{search_word}({self.getLang()})")
             rows = cur.fetchall()
             print(f"検索単語:{search_word}")
             # 関連ID => 関連ワード
@@ -206,12 +228,7 @@ WHERE sense.synset in ({result_txt})
                 self.logging(f"[処理]:メソッド:({sys._getframe().f_code.co_name}) / [内容]関連単語({related_word[0]}/{related_word[1]}/{related_word[2]})")
             # 集合演算
             relational_words['related_words_list']= set(relational_words['related_words_list'])
-            # print(relational_words)
-            #print(f'型:{type(relational_words["related_words"])}')
             cur.close()
-            # jsonに保存
-            # abort
-            self.abort()
 
     def export(self):
         self.logging(f"[処理]:メソッド:({self.getFunction()}) : [内容]:JSONファイルに書き出す。")
@@ -300,6 +317,13 @@ WHERE sense.synset in ({result_txt})
                 fp.write(json.dumps(data))
         else:
             print('ファイルが指定されていません。保存を中断しました。')
+    
+    def create(self):
+        cur = self.__cur()
+        cur.close()
+    
+    def version(self):
+        print(self.getVersion())
 
     def run(self):
         wnjpn_argv = self.getArgv()
@@ -327,13 +351,50 @@ WHERE sense.synset in ({result_txt})
         elif command == 'c' or command == 'count':
             # 単語数一覧
             self.word_count()
-        elif command == 'ex' or command == 'export':
+        elif command == 'p' or command == 'export':
             # 関連単語書き出し。
             self.export()
+
+        elif command == 'create':
+            # 単語書き出し
+            self.create()
 
         elif command == 'help':
             self.help()
 
+        elif command == 'version':
+            self.version()
+
+class WordNetExtension(WordNet):
+    def __init__(self):
+        super().__init__()
+
+    def getJson(self):
+        with open(self.getJsonFile(),'rt') as fp:
+            return json.load(fp)
+
+    def searchWordPlus(self):
+        
+        word = input(">>")
+        select_txt = f"""select word.wordid,word.lemma,sense.synset from word inner join sense
+on word.wordid=sense.wordid
+and word.lemma='{word}'
+"""
+        cur = self._cur()
+        cur.execute(select_txt)
+        rows = cur.fetchall()
+        
+        cur.close()
+    
+    def run(self):
+        argv = self.getArgv()
+        self.setCommand(argv[1])
+        command = self.getCommand()
+        self.logging(f"[処理]:メソッド:({sys._getframe().f_code.co_name}) / [内容]:コマンド呼び出し > {command}")
+        if command == 'plus':
+            self.searchWordPlus()
+        
 # -------------------------------------------------------
 if __name__ == '__main__':
     WordNet().run()
+    WordNetExtension().run()
